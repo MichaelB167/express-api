@@ -5,7 +5,8 @@ const models = require('app/models');
 const Example = models.example;
 
 const authenticate = require('./concerns/authenticate');
-
+// req-request res-response
+// if you don't use next, you won't be notified of errors
 const index = (req, res, next) => {
   Example.find()
     .then(examples => res.json({ examples }))
@@ -13,16 +14,21 @@ const index = (req, res, next) => {
 };
 
 const show = (req, res, next) => {
+  // req is an object that will be passed in
   Example.findById(req.params.id)
+  // checking to see if it exists
     .then(example => example ? res.json({ example }) : next())
     .catch(err => next(err));
 };
 
 const create = (req, res, next) => {
+  // .assign is JS, creating a new object as a copy
   let example = Object.assign(req.body.example, {
+    // checking for authentication via token
     _owner: req.currentUser._id,
   });
   Example.create(example)
+    //sending back json of example that was just created
     .then(example => res.json({ example }))
     .catch(err => next(err));
 };

@@ -10,6 +10,7 @@ const exampleSchema = new mongoose.Schema({
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    // references user model
     required: true,
   },
 }, {
@@ -20,6 +21,7 @@ const exampleSchema = new mongoose.Schema({
 exampleSchema.virtual('length').get(function length() {
   return this.text.length;
 });
+// not using fat arrow because of 'this'
 
 const Example = mongoose.model('Example', exampleSchema);
 
